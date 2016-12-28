@@ -744,6 +744,7 @@ function TDoomIO.WaitForKeyEvent ( out aEvent : TIOEvent;
   aMouseClick : Boolean; aMouseMove : Boolean; aTimeOut : DWord ) : Boolean;
 var iEndLoop : TIOEventTypeSet;
     iStart   : DWord;
+    aPeekEvent : TIOEvent;
 begin
   iEndLoop := [VEVENT_KEYDOWN];
   iStart   := FLastUpdate;
@@ -756,6 +757,15 @@ begin
       FIODriver.Sleep(10);
     until FIODriver.EventPending;
     FIODriver.PollEvent( aEvent );
+    // Condense multiple consecutive mouse move events into a single event.
+    if (aEvent.EType = VEVENT_MOUSEMOVE) and FIODriver.EventPending then
+    begin
+      repeat
+        FIODriver.PeekEvent( aPeekEvent );
+        if aPeekEvent.EType = VEVENT_MOUSEMOVE then
+          FIODriver.PollEvent( aEvent );
+      until (not FIODriver.EventPending) or (aPeekEvent.EType <> VEVENT_MOUSEMOVE);
+    end;
     if FUIRoot.OnEvent( aEvent ) then aEvent.EType := VEVENT_KEYUP;
     if (aEvent.EType = VEVENT_SYSTEM) and (aEvent.System.Code = VIO_SYSEVENT_QUIT) then
       Exit( True );
