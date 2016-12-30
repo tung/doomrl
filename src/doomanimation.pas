@@ -111,12 +111,20 @@ uses viotypes, vuid,
      dfoutput, dfbeing,
      doombase, doomio, doomspritemap;
 
+procedure ScaleAnimationSpeed(out aDuration : DWord; out aDelay : DWord);
+begin
+  aDuration := ( aDuration * Option_AnimationSpeed ) div 100;
+  aDelay := ( aDelay * Option_AnimationSpeed ) div 100;
+  if aDuration < 1 then aDuration := 1;
+end;
+
 { TDoomMissile }
 
 constructor TDoomMissile.Create(aDuration : DWord; aDelay : DWord; aSource, aTarget: TCoord2D; aDrawDelay: Word; aSprite : TSprite;
   aRay: Boolean);
 var iSize : Word;
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( aDuration, aDelay, 0 );
   FPath.Init(Doom.Level,aSource,aTarget);
   FSprite := aSprite;
@@ -181,6 +189,7 @@ end;}
 
 constructor TDoomMark.Create( aDuration : DWord; aDelay : DWord; aCoord : TCoord2D );
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( aDuration, aDelay, 0 );
   FCoord    := aCoord;
 end;
@@ -201,6 +210,7 @@ end;
 constructor TDoomExplodeMark.Create( aDuration : DWord; aDelay : DWord; aCoord: TCoord2D; aColor: Byte );
 var c1, c2, c3 : Byte;
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( Max( aDuration, 1 ), aDelay, 0 );
   case aColor of
     LightBlue: begin C1 := LightBlue;C2 := Cyan;       C3 := White;  end;
@@ -239,6 +249,7 @@ end;
 
 constructor TDoomSoundEvent.Create( aDelay : DWord; aPosition : TCoord2D; aSoundID : DWord );
 begin
+  aDelay := ( aDelay * Option_AnimationSpeed ) div 100;
   inherited Create( 1, aDelay, 0 );
   FPosition := aPosition;
   FSoundID  := aSoundID;
@@ -253,6 +264,7 @@ end;
 
 constructor TDoomBlink.Create( aDuration : DWord; aDelay : DWord; aColor: Word );
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( aDuration, aDelay, 0 );
   FGColor   := NewColor( aColor );
 end;
@@ -268,6 +280,7 @@ constructor TDoomMove.Create ( aDuration : DWord; aDelay : DWord; aUID : TUID; a
   aSprite : TSprite ) ;
 var iSize : Word;
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( aDuration, aDelay, 0 );
   FUID        := aUID;
   FSprite     := aSprite;
@@ -315,6 +328,7 @@ end;
 
 constructor TDoomScreenMove.Create( aDuration : DWord; aDelay : DWord; aTo: TCoord2D );
 begin
+  ScaleAnimationSpeed( aDuration, aDelay );
   inherited Create( aDuration, aDelay, 0 );
   FSource   := SpriteMap.Shift;
   FDest     := SpriteMap.ShiftValue(aTo);

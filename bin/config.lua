@@ -128,6 +128,9 @@ SoundEquipPickup = false
 -- to use the game, you can safely turn it off!
 Hints            = true
 
+-- Speed of animations in graphics mode, from 0 (instant) to 100 (normal).
+AnimationSpeed   = 100
+
 -- Sets the delay value when running. Value is in milliseconds. Set to 0 for no delay.
 RunDelay         = 20
 

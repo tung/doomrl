@@ -151,6 +151,10 @@ begin
   Option_PlayerBackups    := Configure('PlayerBackups',Option_PlayerBackups);
   Option_ScoreBackups     := Configure('ScoreBackups',Option_ScoreBackups);
 
+  Option_AnimationSpeed   := Configure('AnimationSpeed',Option_AnimationSpeed);
+  if Option_AnimationSpeed < 0 then Option_AnimationSpeed := 0;
+  if Option_AnimationSpeed > 100 then Option_AnimationSpeed := 100;
+
   Option_RunDelay         := Configure('RunDelay',Option_RunDelay);
   Option_MessageBuffer    := Configure('MessageBuffer',Option_MessageBuffer);
 

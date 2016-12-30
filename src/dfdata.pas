@@ -133,6 +133,7 @@ const
   Option_LockBreak        : Boolean = True;
   Option_LockClose        : Boolean = True;
   Option_Hints            : Boolean = True;
+  Option_AnimationSpeed   : Byte = 100;
   Option_RunDelay         : Byte = 0;
   Option_MessageBuffer    : DWord = 100;
   Option_MaxRun           : DWord = 100;
