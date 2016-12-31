@@ -4,6 +4,10 @@ interface
 uses vuielement, vuielements, viotypes, vuitypes, vioevent, vconui, vconuiext, vconuirl, doommodule,
      dfdata, dfitem, doomtrait;
 
+type TConUICursorMenu = class( TConUIMenu )
+  procedure OnRedraw; override;
+end;
+
 type TUIChallengeList = array of Byte;
 
 type TUIDowloadBar = class( TUIElement )
@@ -231,11 +235,22 @@ const HelpHeader       = 'DoomRL Help System';
 
 function CreateMenu( const aMenuClass : AnsiString; aParent : TUIElement; aArea : TUIRect ) : TConUIMenu;
 begin
-  if aMenuClass = 'CHOICE' then Exit( TConUIMenu.Create( aParent, aArea ) );
+  if aMenuClass = 'CHOICE' then Exit( TConUICursorMenu.Create( aParent, aArea ) );
   if aMenuClass = 'LETTER' then Exit( TConUITextMenu.Create( aParent, aArea ) );
   {if aMenuClass = 'HYBRID' then }Exit( TConUIHybridMenu.Create( aParent, aArea ) );
 end;
 
+
+{ TConUICursorMenu }
+
+procedure TConUICursorMenu.OnRedraw;
+var iCon : TUIConsole;
+begin
+  inherited OnRedraw;
+  iCon.Init( TConUIRoot(FRoot).Renderer );
+  if FSelected > 0 then
+    iCon.DrawChar( FAbsolute.Pos + Point(-2, FSelected-1-FScroll), FSelectedColor, '>' );
+end;
 
 { TUILoadingScreen }
 
