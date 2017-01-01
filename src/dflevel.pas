@@ -317,7 +317,9 @@ begin
         iColor := LightGray
       else
         iColor := DarkGray;
-  end;
+  end
+  else if (aCoord.x = 1) or (aCoord.x = MAXX) or (aCoord.y = 1) or (aCoord.y = MAXY) then
+    iColor := LightGray;
 
   if iColor = Black then Exit( DefColor );
   Result := NewColor( iColor );
