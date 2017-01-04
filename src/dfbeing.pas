@@ -702,8 +702,7 @@ var iFireDesc  : AnsiString;
     iEnemyUID  : TUID;
     iGunKata   : Boolean;
     iFireCost  : LongInt;
-	  iRange     : Byte;
-    iDist      : Byte;
+    iRange     : Byte;
 begin
   iChainOld  := FTargetPos;
   iChainFire := FChainFire;
@@ -749,11 +748,6 @@ begin
       if not Player.doChooseTarget( Format('Fire%s -- Choose target...',[ iFireDesc ]), iRange ) then Exit( Fail( 'Targeting canceled.', [] ) );
     aTarget := FTargetPos;
   end;
-
-  {**** See if target is in range.}
-  iDist := Distance(self.Position.x, self.Position.y, aTarget.x, aTarget.y);
-      if iDist > iRange then Exit( Fail( 'Out of range!', [] ) );
-
 
   if (aAltFire = ALT_CHAIN) and ( iChainFire > 0 ) then FTargetPos := iChainOld;
   FChainFire := iChainFire;

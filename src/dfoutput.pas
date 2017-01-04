@@ -531,7 +531,6 @@ var Key : byte;
     iTargetRange : Byte;
     iTargetLine  : TVisionRay;
     iLevel : TLevel;
-    iDist : Byte;
     iBlock : Boolean;
 begin
   iLevel      := Doom.Level;
@@ -565,30 +564,14 @@ begin
     Key := IO.WaitForCommand(COMMANDS_MOVE+[COMMAND_GRIDTOGGLE, COMMAND_ESCAPE,COMMAND_MORE,COMMAND_FIRE,COMMAND_ALTFIRE,COMMAND_TACTIC, COMMAND_MMOVE,COMMAND_MRIGHT, COMMAND_MLEFT]);
     if (Key = COMMAND_GRIDTOGGLE) and GraphicsVersion then SpriteMap.ToggleGrid;
     if Key in [ COMMAND_MMOVE, COMMAND_MRIGHT, COMMAND_MLEFT ] then
-       begin
+       if iLevel.isProperCoord( IO.MTarget ) then
          iTarget := IO.MTarget;
-         iDist := Distance(iTarget.x, iTarget.y, Position.x, Position.y);
-         if iDist > aRange-1 then
-           begin
-             iDist := 0;
-             iTargetLine.Init(iLevel, Position, iTarget);
-             while iDist < (aRange - 1) do
-               begin
-                    iTargetLine.Next;
-                    iDist := Distance(iTargetLine.GetSource.x, iTargetLine.GetSource.y,  iTargetLine.GetC.x, iTargetLine.GetC.y);
-               end;
-             if Distance(iTargetLine.GetSource.x, iTargetLine.GetSource.y, iTargetLine.GetC.x, iTargetLine.GetC.y) > aRange-1
-             then iTarget := iTargetLine.prev
-             else iTarget := iTargetLine.GetC;
-           end;
-       end;
     if Key in [ COMMAND_ESCAPE, COMMAND_MRIGHT ] then begin iTarget.x := 0; Break; end;
     if Key = COMMAND_TACTIC then iTarget := aTargets.Next;
     if (Key in COMMANDS_MOVE) then
     begin
       Dir := CommandDirection( Key );
-      if (iLevel.isProperCoord( iTarget + Dir ))
-        and (Distance((iTarget + Dir).x, (iTarget + Dir).y, Position.x, Position.y) <= aRange-1) then
+      if (iLevel.isProperCoord( iTarget + Dir )) then
         iTarget += Dir;
     end;
     if (Key = COMMAND_MORE) then
