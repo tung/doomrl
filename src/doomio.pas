@@ -228,7 +228,7 @@ begin
   end
   else
   begin
-    FIODriver := TTextIODriver.Create( 80, 25 );
+    FIODriver := TTextIODriver.Create( 80, 25{$IFDEF TCOD}, False, Option_Graphics = 'TCOD'{$ENDIF} );
     if (FIODriver.GetSizeX < 80) or (FIODriver.GetSizeY < 25) then
       raise EIOException.Create('Too small console available, resize your console to 80x25!');
     FConsole  := TTextConsoleRenderer.Create( 80, 25, [VIO_CON_BGCOLOR, VIO_CON_CURSOR] );

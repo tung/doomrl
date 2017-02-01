@@ -211,6 +211,13 @@ begin
     GraphicsVersion := False;
     ForceConsole := True;
   end;
+  {$IFDEF TCOD}
+  if CP.isSet('tcod') then
+  begin
+    GraphicsVersion := False;
+    ForceTCOD := True;
+  end;
+  {$ENDIF}
   if CP.isSet('fullscreen') then
     ForceFullscreen := True;
   if CP.isSet('nosound') then

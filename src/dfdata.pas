@@ -62,6 +62,9 @@ const
   ForceNoAudio    : Boolean = False;
   ForceConsole    : Boolean = False;
   ForceGraphics   : Boolean = False;
+  {$IFDEF TCOD}
+  ForceTCOD       : Boolean = False;
+  {$ENDIF}
   ForceFullscreen : Boolean = False;
   VisionBaseValue : Byte = 8;
 
