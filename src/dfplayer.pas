@@ -706,7 +706,7 @@ repeat
     begin
       iCommand := COMMAND_WALKNORTH;
 
-      if not GraphicsVersion then
+      if (not GraphicsVersion) and (FPathRun or (FRun.Dir.X <> 0) or (FRun.Dir.Y <> 0)) then
         IO.Delay( Option_RunDelay );
     end;
   end;
