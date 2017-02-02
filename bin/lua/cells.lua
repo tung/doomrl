@@ -3,7 +3,7 @@ function DoomRL.loadcells()
 	register_cell "floor"
 	{
 		name       = "floor",
-		ascii      = "ù",
+		ascii      = "\249",
 		asciilow   = '.',
 		set        = CELLSET_FLOORS,
 		blname     = "blood",
@@ -16,7 +16,7 @@ function DoomRL.loadcells()
 	register_cell "floorc"
 	{
 		name       = "floor",
-		ascii      = "ù",
+		ascii      = "\249",
 		asciilow   = '.',
 		set        = CELLSET_FLOORS,
 		blname     = "blood",
@@ -29,7 +29,7 @@ function DoomRL.loadcells()
 	register_cell "floorb"
 	{
 		name       = "floor",
-		ascii      = "ù",
+		ascii      = "\249",
 		asciilow   = '.',
 		set        = CELLSET_FLOORS,
 		blname     = "blood",
@@ -193,7 +193,8 @@ function DoomRL.loadcells()
 	{
 		name       = "crate",
 		blname     = "blooded crate",
-		ascii      = "#",
+		ascii      = "\254",
+		asciilow   = "#",
 		color      = BLUE,
 		blcolor    = RED,
 		armor      = 5,
@@ -208,7 +209,8 @@ function DoomRL.loadcells()
 	{
 		name       = "crate",
 		blname     = "blooded crate",
-		ascii      = "#",
+		ascii      = "\254",
+		asciilow   = "#",
 		color      = BROWN,
 		blcolor    = RED,
 		armor      = 5,
@@ -347,7 +349,8 @@ function DoomRL.loadcells()
 	register_cell "rstairs"
 	{
 		name       = "down stairs",
-		ascii      = ">",
+		ascii      = "\242",
+		asciilow   = ">",
 		color      = LIGHTRED,
 		color_dark = RED,
 		flags      = {CF_NOCHANGE, CF_NORUN, CF_OVERLAY, CF_CRITICAL, CF_HIGHLIGHT, CF_STAIRS},
@@ -460,7 +463,8 @@ function DoomRL.loadcells()
 	register_cell "water"
 	{
 		name       = "water",
-		ascii      = "=",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_WATER,
 		flags      = {F_GTSHIFT, F_GFLUID, CF_LIQUID, CF_NOCHANGE},
 		sprite     = SPRITE_WATER,
@@ -469,7 +473,8 @@ function DoomRL.loadcells()
 	register_cell "acid"
 	{
 		name       = "acid",
-		ascii      = "=",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_ACID,
 		flags      = {F_GTSHIFT, F_GFLUID, CF_LIQUID, CF_NOCHANGE, CF_NORUN, CF_HAZARD, CF_HIGHLIGHT},
 		sprite     = SPRITE_ACID,
@@ -494,7 +499,8 @@ function DoomRL.loadcells()
 	register_cell "lava"
 	{
 		name       = "lava",
-		ascii      = "=",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_LAVA,
 		flags      = {F_GTSHIFT, F_GFLUID, CF_LIQUID, CF_NOCHANGE, CF_NORUN, CF_HAZARD, CF_HIGHLIGHT},
 		sprite     = SPRITE_LAVA,
@@ -518,8 +524,9 @@ function DoomRL.loadcells()
 
 	register_cell "pwater"
 	{
-  		name       = "water",
-		ascii      = "=",
+		name       = "water",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_WATER,
 		color_id   = "water",
 		set        = CELLSET_WALLS,
@@ -530,7 +537,8 @@ function DoomRL.loadcells()
 	register_cell "pacid"
 	{
 		name       = "acid",
-		ascii      = "=",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_ACID,
 		color_id   = "acid",
 		set        = CELLSET_WALLS,
@@ -541,7 +549,8 @@ function DoomRL.loadcells()
 	register_cell "plava"
 	{
 		name       = "lava",
-		ascii      = "=",
+		ascii      = "\247",
+		asciilow   = "=",
 		color      = COLOR_LAVA,
 		color_id   = "lava",
 		set        = CELLSET_WALLS,
@@ -556,7 +565,8 @@ function DoomRL.loadcells()
 	register_cell "bridge"
 	{
 		name       = "bridge",
-		ascii      = "=",
+		ascii      = "\240",
+		asciilow   = "=",
 		color      = BROWN,
 		set        = CELLSET_FLOORS,
 		sprite     = SPRITE_BRIDGE,
@@ -606,7 +616,8 @@ function DoomRL.loadcells()
 	{
 		name       = "crate",
 		blname     = "blooded crate",
-		ascii      = "#",
+		ascii      = "\254",
+		asciilow   = "#",
 		color      = LIGHTRED,
 		blcolor    = RED,
 		armor      = 5,
@@ -632,7 +643,8 @@ function DoomRL.loadcells()
 	{
 		name       = "crate",
 		blname     = "blooded crate",
-		ascii      = "#",
+		ascii      = "\254",
+		asciilow   = "#",
 		color      = YELLOW,
 		blcolor    = RED,
 		armor      = 5,
