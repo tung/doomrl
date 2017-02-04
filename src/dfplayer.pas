@@ -571,9 +571,7 @@ begin
 
   if FLastTargetPos.X*FLastTargetPos.Y <> 0 then
     if FLastTargetUID = 0 then
-      if iLevel.isVisible( FLastTargetPos ) then
-        if Distance( FLastTargetPos, FPosition ) <= aRadius then
-          iTargets.PriorityTarget( FLastTargetPos );
+      iTargets.PriorityTarget( FLastTargetPos );
 
   FTargetPos := UI.ChooseTarget(aActionName, aRadius+1, iTargets, FChainFire > 0);
   FreeAndNil(iTargets);
