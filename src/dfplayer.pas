@@ -484,7 +484,7 @@ begin
   FPathRun := False;
   if FEnemiesInVision > 1 then
   begin
-    Fail( 'Can''t run, there are enemies present.',[] );
+    UI.MsgEnter( 'Can''t run, there are enemies present.' );
     Exit;
   end;
   Key := UI.MsgCommandChoice('Run - direction...',COMMANDS_MOVE+[COMMAND_ESCAPE,COMMAND_WAIT]);
