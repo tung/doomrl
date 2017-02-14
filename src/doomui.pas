@@ -283,7 +283,11 @@ begin
       Paint( Player.TargetPos, Yellow );
   { if range > PLight.Rad then range := Plight.rad;}
     if GraphicsVersion then Exit;
-    if Player.Position = FTarget then Exit;
+    if Player.Position = FTarget then
+    begin
+      Paint( FTarget, Good, 'X' );
+      Exit;
+    end;
     iColor := Good;
     iTargetLine.Init( iLevel, Player.Position, FTarget );
     repeat
