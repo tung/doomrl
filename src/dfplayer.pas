@@ -584,7 +584,7 @@ begin
   end;
 
   FLastTargetUID := 0;
-  if iLevel.Being[ FTargetPos ] <> nil then
+  if iLevel.isVisible( FTargetPos ) and (iLevel.Being[ FTargetPos ] <> nil) then
     FLastTargetUID := iLevel.Being[ FTargetPos ].UID;
   FLastTargetPos := FTargetPos;
   Exit( True );
