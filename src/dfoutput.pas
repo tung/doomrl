@@ -296,14 +296,14 @@ end;
 
 procedure TDoomUI.MsgEnter( const aText: AnsiString);
 begin
-  Msg(aText+' Press <Enter>...');
+  Msg(aText+' Press <'+Config.GetKeyBinding(COMMAND_OK)+'>...');
   IO.WaitForEnter;
   MsgUpDate;
 end;
 
 procedure TDoomUI.MsgEnter( const aText: AnsiString; const aParams: array of const);
 begin
-  Msg( aText+' Press <Enter>...', aParams );
+  Msg( aText+' Press <'+Config.GetKeyBinding(COMMAND_OK)+'>...', aParams );
   IO.WaitForEnter;
   MsgUpDate;
 end;
