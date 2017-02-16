@@ -518,7 +518,7 @@ begin
   end;
 
   if iLevel.isProperCoord( iAct ) and iLevel.cellFlagSet( iAct, aFlagID )
-    then iLevel.CallHook( iAct, Self, CellHook_OnAct )
+    then iLevel.CallHook( iAct, [ Self ], CellHook_OnAct )
     else Exit( Fail( 'You can''t %s that.', [ aActName ] ) );
   Exit( True );
 end;
@@ -641,6 +641,7 @@ end;
 
 procedure TPlayer.AIControl;
 var iLevel      : TLevel;
+    iHideDesc   : Boolean;
     iCommand    : Byte;
     iDir        : TDirection;
     iMove       : TCoord2D;
@@ -677,13 +678,15 @@ repeat
   if FEnemiesInVision > 1 then begin FPathRun := False; FRun.Stop; end;
 
   if iLevel.Item[ FPosition ] <> nil then
+  begin
+    iHideDesc := FPathRun or (FRun.Active and (FRun.Dir.code = 5));
     if iLevel.Item[ FPosition ].Hooks[ Hook_OnEnter ] then
     begin
-      iLevel.Item[ FPosition ].CallHook( Hook_OnEnter, [ Self ] );
+      iLevel.Item[ FPosition ].CallHook( Hook_OnEnter, [ Self, iHideDesc ] );
       if (FSpeedCount < 5000) or (Doom.State <> DSPlaying) then Exit;
     end
     else
-    if not FPathRun then
+    if not iHideDesc then
       with iLevel.Item[ FPosition ] do
         if isLever then
            UI.Msg('There is a %s here.', [ DescribeLever( iLevel.Item[ FPosition ] ) ] )
@@ -691,6 +694,7 @@ repeat
           if Flags[ IF_PLURALNAME ]
             then UI.Msg('There are %s lying here.', [ GetName( False ) ] )
             else UI.Msg('There is %s lying here.', [ GetName( False ) ] );
+  end;
 
   if FRun.Active then
   begin
@@ -824,7 +828,7 @@ try
        MoveBlock :
          begin
            if iLevel.isProperCoord( iMove ) and iLevel.cellFlagSet( iMove, CF_PUSHABLE ) then
-             iLevel.CallHook( iMove, Self, CellHook_OnAct )
+             iLevel.CallHook( iMove, [ Self ], CellHook_OnAct )
            else
            begin
              if Option_Blindmode then UI.Msg( 'You bump into a wall.' );
@@ -878,7 +882,7 @@ try
            FSpeedCount := iTempSC;
          end;
        MoveBeing : Attack( iLevel.Being[ iMove ] );
-       MoveDoor  : iLevel.CallHook( iMove, Self, CellHook_OnAct );
+       MoveDoor  : iLevel.CallHook( iMove, [ Self ], CellHook_OnAct );
     end;
     if FRun.Active and (not FPathRun) then
       if RunStopNear or

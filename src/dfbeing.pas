@@ -1245,10 +1245,19 @@ end;
 
 procedure TBeing.Action;
 var iThisUID : DWord;
+    iPlayer  : TPlayer;
+    iHideDesc: Boolean;
 begin
   FMeleeAttack := False;
   iThisUID := UID;
-  TLevel(Parent).CallHook( FPosition, Self, CellHook_OnEnter );
+  if isPlayer then
+  begin
+    iPlayer := Self as TPlayer;
+    iHideDesc := iPlayer.FPathRun or (iPlayer.FRun.Active and (iPlayer.FRun.Dir.code = 5));
+  end
+  else
+    iHideDesc := False;
+  TLevel(Parent).CallHook( FPosition, [ Self, iHideDesc ], CellHook_OnEnter );
   if UIDs[ iThisUID ] = nil then Exit;
   if isPlayer then
     (Self as TPlayer).AIControl
@@ -2509,7 +2518,7 @@ begin
     if MoveR = MoveDoor then
     begin
       if BF_OPENDOORS in Being.FFlags then
-        TLevel(Being.Parent).CallHook( FPath.Start.Coord, Being, CellHook_OnAct );
+        TLevel(Being.Parent).CallHook( FPath.Start.Coord, [ Being ], CellHook_OnAct );
       State.Push( Byte(MoveR) );
       State.PushCoord( Being.LastMove );
       Exit(2);
