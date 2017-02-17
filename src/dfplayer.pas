@@ -994,36 +994,53 @@ end;
 procedure TPlayer.ExamineNPC;
 var iLevel : TLevel;
     iWhere : TCoord2D;
-    iCount  : Word;
+    iBeing : TBeing;
+    iBeingW: TCoord2D;
 begin
   iLevel := TLevel(Parent);
-  iCount := 0;
+  iBeing := nil;
   for iWhere in iLevel.Area do
+  begin
     if iLevel.isVisible(iWhere) and ( iLevel.Being[iWhere] <> nil ) and (iWhere <> FPosition) then
-    with iLevel.Being[iWhere] do
     begin
-      Inc(iCount);
-      UI.Msg('You see '+ GetName(false) + ' (' + WoundStatus + ') ' + BlindCoord(iWhere-Self.FPosition)+'.');
+      if iBeing = nil then
+        UI.Msg('You see:')
+      else
+        UI.Msg('%s (%s) %s,', [ iBeing.GetName(false), iBeing.WoundStatus, BlindCoord(iBeingW - Self.FPosition) ]);
+      iBeing := iLevel.Being[iWhere];
+      iBeingW := iWhere;
     end;
-  if iCount = 0 then UI.Msg('There are no monsters in sight.');
+  end;
+  if iBeing <> nil then
+    UI.Msg('%s (%s) %s.', [ iBeing.GetName(false), iBeing.WoundStatus, BlindCoord(iBeingW - Self.FPosition) ])
+  else
+    UI.Msg('There are no monsters in sight.');
 end;
 
 procedure TPlayer.ExamineItem;
 var iLevel : TLevel;
     iWhere : TCoord2D;
-    iCount : Word;
+    iItem  : TItem;
+    iItemW : TCoord2D;
 begin
   iLevel := TLevel(Parent);
-  iCount := 0;
+  iItem := nil;
   for iWhere in iLevel.Area do
-    if iLevel.isVisible(iWhere) then
-      if iLevel.Item[iWhere] <> nil then
-      with iLevel.Item[iWhere] do
-      begin
-        Inc(iCount);
-        UI.Msg('You see '+ GetName(false) + ' ' + BlindCoord(iWhere-Self.FPosition)+'.');
-      end;
-  if iCount = 0 then UI.Msg('There are no items in sight.');
+  begin
+    if iLevel.isVisible(iWhere) and ( iLevel.Item[iWhere] <> nil ) then
+    begin
+      if iItem = nil then
+        UI.Msg('You see:')
+      else
+        UI.Msg('%s %s,', [ iItem.GetName(false), BlindCoord(iItemW - Self.FPosition)]);
+      iItem := iLevel.Item[iWhere];
+      iItemW := iWhere;
+    end;
+  end;
+  if iItem <> nil then
+    UI.Msg('%s %s.', [ iItem.GetName(false), BlindCoord(iItemW - Self.FPosition) ])
+  else
+    UI.Msg('There are no items in sight.');
 end;
 
 // pieczarki oliwki szynka kielbasa peperoni motzarella //
