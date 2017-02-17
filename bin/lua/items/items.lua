@@ -397,6 +397,7 @@ function DoomRL.loaditems()
 		type    = ITEMTYPE_AMMO,
 		ammo    = 24,
 		ammomax = 100,
+		flags   = { IF_PLURALNAME },
 	}
 
 	register_item "shell"

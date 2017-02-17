@@ -251,6 +251,7 @@ begin
   if iItem = nil then Exit;
   if iItem.isWearable then Exit(DoWear(iItem));
   if iItem.isPack then (FOwner as TBeing).ActionUse(iItem);
+  if iItem.isAmmo then (FOwner as TBeing).ActionReload(SeekAmmo(iItem.NID));
 end;
 
 type TItemArray = specialize TGObjectArray< TItem >;

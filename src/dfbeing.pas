@@ -94,7 +94,7 @@ TBeing = class(TThing,IPathQuery)
     // On success they do eat up action cost!
     function ActionQuickSwap : boolean;
     function ActionDrop( Item : TItem ) : boolean;
-    function ActionReload : Boolean;
+    function ActionReload( aItem : TItem = nil ) : Boolean;
     function ActionDualReload : Boolean;
     function ActionAltReload : Boolean;
     function ActionFire( aChooseTarget : Boolean; aTarget : TCoord2D; aWeapon : TItem; aAltFire : TAltFire = ALT_NONE ) : Boolean;
@@ -577,15 +577,16 @@ end;
   Exit( False );
 end;
 
-function TBeing.ActionReload : Boolean;
+function TBeing.ActionReload( aItem : TItem ) : Boolean;
 var Weapon   : TItem;
-    AItem    : TItem;
     iAmmoUID : TUID;
     iPack    : Boolean;
     AmmoName : AnsiString;
 begin
   Weapon := Inv.Slot[ efWeapon ];
   if ( Weapon = nil ) or ( not Weapon.isRanged ) then Exit( Fail( 'You have no weapon to reload.',[] ) );
+  if (aItem <> nil) and ((not aItem.isAmmo) or (aItem.NID <> Weapon.AmmoID)) then
+    Exit( Fail( 'Your %s doesn''t take %s%s.', [ Weapon.Name, aItem.Name, IIf(not aItem.Flags[ IF_PLURALNAME ], 's') ] ) );
   if (Weapon.Flags[ IF_RECHARGE ]) and ((not Weapon.Flags[ IF_CHAMBEREMPTY ]) or (Weapon.Ammo = 0)) then Exit( Fail( 'The weapon cannot be manually reloaded!', [] ) );
   if (Weapon.Flags[ IF_NOAMMO ]) and (not Weapon.Flags[ IF_CHAMBEREMPTY ])then Exit( Fail( 'The weapon doesn''t need to be reloaded!', [] ) );
   if ( Weapon.Ammo = Weapon.AmmoMax ) then Exit( Fail( 'Your %s is already loaded.', [ Weapon.Name ] ) );
@@ -599,30 +600,30 @@ begin
     Exit( Success( 'You pump a shell into the %s chamber.',[Weapon.Name],200 ) );
   end;
 
-  AItem := getAmmoItem( Weapon );
+  if aItem = nil then aItem := getAmmoItem( Weapon );
 
-  if AItem = nil then Exit( Fail( 'You have no more ammo for the %s!',[Weapon.Name] ) );
+  if aItem = nil then Exit( Fail( 'You have no more ammo for the %s!',[Weapon.Name] ) );
 
-  iAmmoUID := AItem.UID;
-  AmmoName := AItem.Name;
-  
-  iPack := AItem.isAmmoPack;
+  iAmmoUID := aItem.UID;
+  AmmoName := aItem.Name;
+
+  iPack := aItem.isAmmoPack;
 
   if Weapon.Flags[ IF_PUMPACTION ] then
   begin
     Weapon.Flags[ IF_CHAMBEREMPTY ] := False;
-    Reload( AItem, Weapon.Flags[ IF_SINGLERELOAD ] );
+    Reload( aItem, Weapon.Flags[ IF_SINGLERELOAD ] );
     Emote( 'You '+IIf(iPack,'quickly ')+'load a shell into the %s.', 'loads a shell into his %s.', [Weapon.Name] );
   end
   else
   begin
-    Reload( AItem, Weapon.Flags[ IF_SINGLERELOAD ] );
+    Reload( aItem, Weapon.Flags[ IF_SINGLERELOAD ] );
     Emote( 'You '+IIf(iPack,'quickly ')+'reload the %s.', 'reloads his %s.', [Weapon.Name] );
   end;
-  
+
   if iPack and ( UIDs[ iAmmoUID ] = nil ) and IsPlayer then
     UI.Msg( 'Your %s is depleted.', [AmmoName] );
-  
+
   Exit( True );
 end;
 
@@ -892,10 +893,14 @@ begin
   if Item = nil then
   begin
     Item := TLevel(Parent).Item[ FPosition ];
-    if ( Item <> nil ) and (Item.isLever or Item.isPack or Item.isWearable)
-	then isOnGround := True
-    else
-    if isPlayer then
+    if Item <> nil then
+    begin
+      if Item.isLever or Item.isPack or Item.isWearable then
+        isOnGround := True
+      else if Item.isAmmo then
+        Exit( ActionReload( Item ) );
+    end
+    else if isPlayer then
     begin
       Item := Inv.Choose([ITEMTYPE_PACK],'use');
       if Item = nil then Exit( False );
