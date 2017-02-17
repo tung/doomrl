@@ -97,7 +97,7 @@ TPlayer = class(TBeing)
   procedure UpdateVisual;
   function ASCIIMoreCode : AnsiString; override;
   function CreateAutoTarget( aRange : Integer ): TAutoTarget;
-  function doChooseTarget( aActionName : string; aRadius : Byte ) : boolean;
+  function doChooseTarget( aActionName : string; aRadius : Byte; aLimitRange : Boolean ) : boolean;
   private
   function OnTraitConfirm( aSender : TUIElement ) : Boolean;
   procedure ExamineNPC;
@@ -549,7 +549,7 @@ begin
         Result.AddTarget( iCoord );
 end;
 
-function TPlayer.doChooseTarget( aActionName : string; aRadius : Byte ) : boolean;
+function TPlayer.doChooseTarget( aActionName : string; aRadius : Byte; aLimitRange : Boolean ) : boolean;
 var iTargets : TAutoTarget;
     iTarget  : TBeing;
     iLevel   : TLevel;
@@ -573,7 +573,7 @@ begin
     if FLastTargetUID = 0 then
       iTargets.PriorityTarget( FLastTargetPos );
 
-  FTargetPos := UI.ChooseTarget(aActionName, aRadius+1, iTargets, FChainFire > 0);
+  FTargetPos := UI.ChooseTarget(aActionName, aRadius+1, aLimitRange, iTargets, FChainFire > 0);
   FreeAndNil(iTargets);
   if FTargetPos.X = 0 then Exit( False );
 
