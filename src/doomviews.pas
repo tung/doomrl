@@ -1285,9 +1285,9 @@ end;
 
 function TUIBaseItemView.OnKeyDown ( const event : TIOKeyEvent ) : Boolean;
 begin
-  if (FMenu <> nil) and Assigned(FOnConfirm) and (event.ModState = []) and (FMenu.IsValid( FMenu.Selected ) ) and (FMenu.SelectedItem.Data <> nil) then
+  if (FMenu <> nil) and Assigned(FOnConfirm) and (event.ModState = []) and (FMenu.IsValid( FMenu.Selected ) ) then
   begin
-    if (ItemResultDrop in FActions) and  (event.Code = VKEY_BACK) then
+    if (ItemResultDrop in FActions) and  (event.Code = VKEY_BACK) and (FMenu.SelectedItem.Data <> nil) then
     begin
       FOnConfirm( FMenu, ItemResultDrop );
       Free;
