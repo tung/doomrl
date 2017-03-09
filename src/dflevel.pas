@@ -27,6 +27,8 @@ TLevel = class(TLuaMapNode, IConUIASCIIMap)
     ToHitBonus  : ShortInt;
     FFloorCell  : Word;
     FFeeling    : AnsiString;
+    FInitKills  : DWord;
+    FInitMaxKills : DWord;
     constructor Create; reintroduce;
     procedure Init( nStyle : byte; nLNum : Word;nName : string; nSpecExit : string; nDepth : Word; nDangerLevel : Word);
     procedure AfterGeneration( aGenerated : Boolean );
@@ -148,6 +150,8 @@ TLevel = class(TLuaMapNode, IConUIASCIIMap)
     property Special_Exit : AnsiString read SpecExit;
     property Feeling      : AnsiString read FFeeling    write FFeeling;
     property id : AnsiString           read FID;
+    property InitKills    : DWord      read FInitKills  write FInitKills;
+    property InitMaxKills : DWord      read FInitMaxKills write FInitMaxKills;
   end;
 
 implementation
@@ -471,6 +475,8 @@ begin
   FFloorCell := LuaSystem.Defines[LuaSystem.Get(['generator','styles',FStyle,'floor'])];
   if LuaSystem.Get(['diff',Doom.Difficulty,'respawn']) then Include( FFlags, LF_RESPAWN );
   ToHitBonus := LuaSystem.Get(['diff',Doom.Difficulty,'tohitbonus']);
+  FInitKills := Player.FKills.Count;
+  FInitMaxKills := Player.FKills.MaxCount;
 end;
 
 procedure TLevel.AfterGeneration( aGenerated : Boolean );

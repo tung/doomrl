@@ -642,6 +642,8 @@ var iStatus  : AnsiString;
     iDamLevel   : DWord;
     iKills      : DWord;
     iMaxKills   : DWord;
+    iLevelKills : DWord;
+    iLevelMaxKills : DWord;
     iKillSpree  : DWord;
     iKillRecord : DWord;
     iDodgeBonus : Word;
@@ -667,17 +669,35 @@ begin
     iRealTime   := FStatistics.Map['real_time'];
     iDamTotal   := FStatistics.Map['damage_taken'];
     iDamLevel   := FStatistics.Map['damage_on_level'];
+
+    { Don't leak number of living enemies on the current level, }
+    { unless the player can already tell. }
     iKills      := FStatistics.Map['kills'];
-    iMaxKills   := FStatistics.Map['max_kills'];
+    iLevelKills := iKills - Doom.Level.InitKills;
+    if Doom.Level.Flags[ LF_BEINGSVISIBLE ] or Doom.Level.Empty then
+    begin
+      iMaxKills := FStatistics.Map['max_kills'];
+      iLevelMaxKills := iMaxKills - Doom.Level.InitMaxKills;
+    end
+    else
+    begin
+      iMaxKills := Doom.Level.InitMaxKills + iLevelKills + IIf( BeingsInVision > 10, BeingsInVision, 10 );
+      iLevelMaxKills := 0;
+    end;
+
     iKillSpree  := FKills.BestNoDamageSequence;
     iKillRecord := FStatistics.Map['kills_non_damage'];
     if iKillSpree > iKillRecord then iKillRecord := iKillSpree;
 
     iContent.Push( Format( '@L%s@l, level @L%d@l @L%s,',[Name,ExpLevel,AnsiString(LuaSystem.Get(['klasses',Klass,'name']))] ) );
-    iContent.Push( Format( 'currently on level @L%d@l of the Phobos base. ', [iDepth] ) );
+    iContent.Push( Format( '  currently on level @L%d@l of the Phobos base. ', [iDepth] ) );
     iContent.Push( Format( 'He survived @L%d@l turns, which took him @L%d@l seconds. ', [ iGameTime, iRealTime ] ) );
     iContent.Push( Format( 'He took @L%d@l damage, @L%d@l on this floor alone. ', [ iDamTotal, iDamLevel ] ) );
-    iContent.Push( Format( 'He killed @L%d@l out of @L%d@l enemies total. ', [ iKills, iMaxKills ] ) );
+    iContent.Push( Format( 'He killed @L%d@l out of @L%d@l enemies total, ', [ iKills, iMaxKills ] ) );
+    if iLevelMaxKills > 0 then
+      iContent.Push( Format( '  with @L%d@l kill%s out of @L%d@l on this floor alone. ', [ iLevelKills, IIf(iLevelKills = 1, '', 's'), iLevelMaxKills ] ) )
+    else
+      iContent.Push( Format( '  with @L%d@l kill%s on this floor alone. ', [ iLevelKills, IIf(iLevelKills = 1, '', 's') ] ) );
     iContent.Push( Format( 'His current killing spree is @L%d@l, with a record of @L%d@l. ', [ iKillSpree, iKillRecord ] ) );
     iContent.Push( '' );
     iContent.Push( Format( 'Current movement speed is @L%.2f@l second/move.', [getMoveCost/(Speed*10.0)] ) );
