@@ -79,6 +79,9 @@ register_level "abyssal_plains"
 	end,
 
 	OnKillAll = function ()
+		if not level.flags[ LF_RESPAWN ] then
+			ui.msg("You feel relatively safe now.")
+		end
 		if level.status > 0 then
 			level.data.kill_all  = true
 		end

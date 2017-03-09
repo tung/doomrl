@@ -301,6 +301,8 @@ register_level "the_chained_court"
 			generator.transmute( "wall", "floor", area.new(7,5,11,16) )
 			player:add_history("He defeated the Hell Arena Master!")
 			level.status = 3
+		elseif not level.flags[ LF_RESPAWN ] then
+			ui.msg("You feel relatively safe now.")
 		end
 	end,
 
