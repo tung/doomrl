@@ -487,8 +487,9 @@ begin
     UI.MsgEnter( 'Can''t run, there are enemies present.' );
     Exit;
   end;
-  Key := UI.MsgCommandChoice('Run - direction...',COMMANDS_MOVE+[COMMAND_ESCAPE,COMMAND_WAIT]);
+  Key := UI.MsgCommandChoice('Run - direction...',COMMANDS_MOVE+[COMMAND_ESCAPE,COMMAND_WAIT,COMMAND_RUNMODE]);
   if Key = COMMAND_ESCAPE then Exit;
+  if Key = COMMAND_RUNMODE then Key := COMMAND_WAIT;
   FRun.Start( CommandDirection(Key) );
 end;
 
