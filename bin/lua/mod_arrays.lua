@@ -421,10 +421,10 @@ function DoomRL.load_mod_arrays()
 			item.name         = "assault "..item.name
 			item.acc          = item.__proto.acc + 2
 			item.shots        = math.ceil(item.__proto.shots / 2)
-			item.shotcost     = math.max(item.__proto.shotcost,1) * 2
 			item.reloadtime   = item.__proto.reload / 2
 			item.damage_dice  = item.__proto.damage_dice + 1
-			item.damage_sides = item.__proto.damage_sides - 1
+			item.ammomax      = math.ceil(item.__proto.ammomax * 0.65)
+			item.ammo         = math.min(item.ammo, item.ammomax)
 		end,
 	}
 
