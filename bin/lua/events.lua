@@ -170,31 +170,6 @@ function DoomRL.load_events()
 		end,
 	}
 
-  register_event "darkness_event"
-  {
-    message    = "This floor is pitch-black!",
-    history    = "On level @1, he was stumbling in the dark!",
-    weight     = 2,
-    min_dlevel = 9,
-    min_diff   = 2,
-
-    setup      = function ()
-      local dark_event = {}
-      dark_event.old_stairsense = player.flags[ BF_STAIRSENSE ]
-      dark_event.old_darkness = player.flags[ BF_DARKNESS ]
-      player.vision = player.vision - 2
-      player.flags[ BF_DARKNESS ] = true
-      player.flags[ BF_STAIRSENSE ] = false
-
-      generator.OnExit = function ()
-        player.flags[ BF_DARKNESS ] = dark_event.old_darkness
-        player.flags[ BF_STAIRSENSE ] = dark_event.old_stairsense
-        player.vision = player.vision + 2
-      end
-
-    end,
-  }
-
 end
 
 function generator.setup_targeted_event( step )
