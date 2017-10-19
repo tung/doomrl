@@ -685,7 +685,7 @@ begin
       iLevelMaxKills := 0;
     end;
 
-    iKillSpree  := FKills.BestNoDamageSequence;
+    iKillSpree  := FKills.NoDamageSequence;
     iKillRecord := FStatistics.Map['kills_non_damage'];
     if iKillSpree > iKillRecord then iKillRecord := iKillSpree;
 
