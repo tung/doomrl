@@ -406,12 +406,13 @@ begin
     IO.MsgEnter('Can''t run, there are enemies present.');
     Exit;
   end;
-  iInput := IO.MsgCommandChoice('Run - direction...',INPUT_MOVE+[INPUT_ESCAPE,INPUT_WAIT]);
+  iInput := IO.MsgCommandChoice('Run - direction...',INPUT_MOVE+[INPUT_ESCAPE,INPUT_WAIT,INPUT_RUN]);
   if iInput = INPUT_ESCAPE then
   begin
     IO.Msg('cancelled.');
     Exit;
   end;
+  if iInput = INPUT_RUN then iInput := INPUT_WAIT;
   FRun.Start( InputDirection(iInput) );
 end;
 
