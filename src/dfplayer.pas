@@ -459,9 +459,7 @@ begin
 
   if FLastTargetPos.X*FLastTargetPos.Y <> 0 then
     if FLastTargetUID = 0 then
-      if iLevel.isVisible( FLastTargetPos ) then
-        if Distance( FLastTargetPos, FPosition ) <= aRadius then
-          iTargets.PriorityTarget( FLastTargetPos );
+      iTargets.PriorityTarget( FLastTargetPos );
 
   FTargetPos := IO.ChooseTarget(aActionName, aRadius+1, aLimitRange, iTargets, FChainFire > 0 );
   if FLastTargetPos.X*FLastTargetPos.Y <> 0
@@ -477,7 +475,7 @@ begin
   end;
 
   FLastTargetUID := 0;
-  if iLevel.Being[ FTargetPos ] <> nil then
+  if (iLevel.isVisible( FTargetPos )) and (iLevel.Being[ FTargetPos ] <> nil) then
     FLastTargetUID := iLevel.Being[ FTargetPos ].UID;
   FLastTargetPos := FTargetPos;
   Exit( True );
