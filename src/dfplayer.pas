@@ -403,7 +403,7 @@ begin
   FPathRun := False;
   if FEnemiesInVision > 1 then
   begin
-    Fail( 'Can''t run, there are enemies present.',[] );
+    IO.MsgEnter('Can''t run, there are enemies present.');
     Exit;
   end;
   iInput := IO.MsgCommandChoice('Run - direction...',INPUT_MOVE+[INPUT_ESCAPE,INPUT_WAIT]);
