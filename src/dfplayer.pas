@@ -685,7 +685,7 @@ begin
     end
     else
     begin
-      if not GraphicsVersion then
+      if not GraphicsVersion and FPathRun or (FRun.Dir.code <> 5) then
         IO.Delay( Option_RunDelay );
     end;
   end;
