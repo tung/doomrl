@@ -702,36 +702,44 @@ end;
 procedure TPlayer.ExamineNPC;
 var iLevel : TLevel;
     iWhere : TCoord2D;
-    iCount  : Word;
+    iBeing : TBeing;
+    iBeingW: TCoord2D;
 begin
   iLevel := TLevel(Parent);
-  iCount := 0;
+  iBeing := nil;
   for iWhere in iLevel.Area do
+  begin
     if iLevel.isVisible(iWhere) and ( iLevel.Being[iWhere] <> nil ) and (iWhere <> FPosition) then
-    with iLevel.Being[iWhere] do
     begin
-      Inc(iCount);
-      IO.Msg('You see '+ GetName(false) + ' (' + WoundStatus + ') ' + BlindCoord(iWhere-Self.FPosition)+'.');
+      if iBeing = nil then IO.Msg('You see:')
+      else IO.Msg('%s (%s) %s,', [ iBeing.GetName(false), iBeing.WoundStatus, BlindCoord(iBeingW-Self.FPosition) ]);
+      iBeing := iLevel.Being[iWhere];
+      iBeingW := iWhere;
     end;
-  if iCount = 0 then IO.Msg('There are no monsters in sight.');
+  end;
+  if iBeing = nil then IO.Msg('There are no monsters in sight.')
+  else IO.Msg('%s (%s) %s.', [ iBeing.GetName(false), iBeing.WoundStatus, BlindCoord(iBeingW-Self.FPosition) ]);
 end;
 
 procedure TPlayer.ExamineItem;
 var iLevel : TLevel;
     iWhere : TCoord2D;
-    iCount : Word;
+    iItem  : TItem;
+    iItemW : TCoord2D;
 begin
   iLevel := TLevel(Parent);
-  iCount := 0;
+  iItem := nil;
   for iWhere in iLevel.Area do
     if iLevel.isVisible(iWhere) then
       if iLevel.Item[iWhere] <> nil then
-      with iLevel.Item[iWhere] do
       begin
-        Inc(iCount);
-        IO.Msg('You see '+ GetName(false) + ' ' + BlindCoord(iWhere-Self.FPosition)+'.');
+        if iItem = nil then IO.Msg('You see:')
+        else IO.Msg('%s %s,', [ iItem.GetName(false), BlindCoord(iItemW-Self.FPosition) ]);
+        iItem := iLevel.Item[iWhere];
+        iItemW := iWhere;
       end;
-  if iCount = 0 then IO.Msg('There are no items in sight.');
+  if iItem = nil then IO.Msg('There are no items in sight.')
+  else IO.Msg('%s %s.', [ iItem.GetName(false), BlindCoord(iItemW-Self.FPosition) ]);
 end;
 
 // pieczarki oliwki szynka kielbasa peperoni motzarella //
