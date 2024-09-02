@@ -311,8 +311,10 @@ function DoomRL.loadcells()
 		flags      = { CF_NOCHANGE, CF_NORUN, CF_OVERLAY, CF_CRITICAL, CF_HIGHLIGHT, CF_STAIRS, CF_STAIRSENSE },
 		sprite     = SPRITE_GRAYSTAIRS,
 
-		OnEnter = function(c,being)
-			being:msg("There are stairs leading downward here.")
+		OnEnter = function(c,being,hidedesc)
+			if not hidedesc then
+				being:msg("There are stairs leading downward here.")
+			end
 		end,
 
 		OnExit = function(c)
@@ -330,8 +332,10 @@ function DoomRL.loadcells()
 		flags      = {CF_NOCHANGE, CF_NORUN, CF_OVERLAY, CF_CRITICAL, CF_HIGHLIGHT, CF_STAIRS},
 		sprite     = SPRITE_REDSTAIRS,
 
-		OnEnter = function(c,being)
-			being:msg("There are stairs leading to "..levels[level.special_exit].name.." here.")
+		OnEnter = function(c,being,hidedesc)
+			if not hidedesc then
+				being:msg("There are stairs leading to "..levels[level.special_exit].name.." here.")
+			end
 		end,
 
 		OnExit = function(c)

@@ -531,9 +531,11 @@ end;
 
 function TPlayer.PlayerTick : Boolean;
 var iThisUID    : DWord;
+    iHideDesc   : Boolean;
 begin
   iThisUID := UID;
-  TLevel(Parent).CallHook( FPosition, Self, CellHook_OnEnter );
+  iHideDesc := FPathRun or FRun.Active and (FRun.Dir.code = 5);
+  TLevel(Parent).CallHook( FPosition, [ Self, iHideDesc ], CellHook_OnEnter );
   if UIDs[ iThisUID ] = nil then Exit( False );
 
   MasterDodge := False;
@@ -649,7 +651,7 @@ begin
 
   if iLevel.Item[ FPosition ] <> nil then
   begin
-    if not FPathRun then
+    if not (FPathRun or FRun.Active and (FRun.Dir.code = 5)) then
       with iLevel.Item[ FPosition ] do
         if isLever then
            IO.Msg('There is a %s here.', [ DescribeLever( iLevel.Item[ FPosition ] ) ] )

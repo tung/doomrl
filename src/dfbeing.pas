@@ -1382,10 +1382,15 @@ end;
 
 procedure TBeing.Action;
 var iThisUID : DWord;
+    iHideDesc: Boolean;
 begin
   FMeleeAttack := False;
   iThisUID := UID;
-  TLevel(Parent).CallHook( FPosition, Self, CellHook_OnEnter );
+  iHideDesc := False;
+  if isPlayer then
+    with Self as TPlayer do
+      iHideDesc := FPathRun or (FRun.Active and (FRun.Dir.code = 5));
+  TLevel(Parent).CallHook( FPosition, [ Self, iHideDesc ], CellHook_OnEnter );
   if UIDs[ iThisUID ] = nil then Exit;
   LastPos := FPosition;
   CallHook(Hook_OnAction,[]);
@@ -1418,7 +1423,7 @@ begin
     COMMAND_TAKEOFF   : Exit( ActionTakeOff( aCommand.Slot ) );
     COMMAND_SWAP      : Exit( ActionSwap( aCommand.Item, aCommand.Slot ) );
     COMMAND_WAIT      : Dec( FSpeedCount, 1000 );
-    COMMAND_ACTION    : TLevel( Parent ).CallHook( aCommand.Target, Self, CellHook_OnAct );
+    COMMAND_ACTION    : TLevel( Parent ).CallHook( aCommand.Target, [ Self ], CellHook_OnAct );
     COMMAND_ENTER     : TLevel( Parent ).CallHook( Position, CellHook_OnExit );
     COMMAND_MELEE     : Attack( aCommand.Target );
     COMMAND_RELOAD    : Exit( ActionReload );
@@ -2685,7 +2690,7 @@ begin
     if MoveR = MoveDoor then
     begin
       if BF_OPENDOORS in Being.FFlags then
-        TLevel(Being.Parent).CallHook( FPath.Start.Coord, Being, CellHook_OnAct );
+        TLevel(Being.Parent).CallHook( FPath.Start.Coord, [ Being ], CellHook_OnAct );
       State.Push( Byte(MoveR) );
       State.PushCoord( Being.LastMove );
       Exit(2);

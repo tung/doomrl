@@ -61,7 +61,7 @@ TLevel = class(TLuaMapNode, ITextMap)
 
     function CallHook( coord : TCoord2D;  Hook : TCellHook ) : Variant; overload;
     function CallHook( coord : TCoord2D; aCellID : Word; Hook : TCellHook ) : Variant; overload;
-    function CallHook( coord : TCoord2D; What : TThing; Hook : TCellHook ) : Variant; overload;
+    function CallHook( coord : TCoord2D; const Params : array of Const; Hook : TCellHook ) : Variant; overload;
     procedure CallHook( Hook : Byte; const Params : array of Const );
     function CallHookCheck( Hook : Byte; const Params : array of Const ) : Boolean;
 
@@ -745,10 +745,17 @@ begin
     else CallHook := False;
 end;
 
-function TLevel.CallHook(coord: TCoord2D; What: TThing; Hook: TCellHook) : Variant;
+function TLevel.CallHook(coord: TCoord2D; const Params : array of const; Hook: TCellHook) : Variant;
+var args : array of TVarRec;
+    i    : Integer;
 begin
+  SetLength(args, Length(Params) + 1);
+  args[0].vtype   := vtObject;
+  args[0].vobject := LuaCoord(coord);
+  for i := Low(Params) to High(Params) do
+    args[i + 1] := Params[i];
   if Hook in Cells[ GetCell(coord) ].Hooks
-    then CallHook := LuaSystem.ProtectedCall( [ 'cells', Cell[ coord ], CellHooks[ Hook ] ], [LuaCoord(coord),What] )
+    then CallHook := LuaSystem.ProtectedCall( [ 'cells', Cell[ coord ], CellHooks[ Hook ] ], args )
     else CallHook := False;
 end;
 
