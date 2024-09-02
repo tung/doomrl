@@ -328,6 +328,13 @@ begin
           iCommand := COMMAND_NONE;
           if FInv[iSelected].Item.isWearable then iCommand := COMMAND_WEAR;
           if FInv[iSelected].Item.isPack     then iCommand := COMMAND_USE;
+          if FInv[iSelected].Item.isAmmo then
+          begin
+            while (iSelected < (FInv.Size-1)) and FInv[iSelected+1].Item.isAmmo and
+                (FInv[iSelected+1].Item.NID = FInv[iSelected].Item.NID) do
+              Inc(iSelected);
+            iCommand := COMMAND_USE;
+          end;
           FState := PLAYERVIEW_CLOSING;
           if iCommand <> COMMAND_NONE then
             Doom.HandleCommand( TCommand.Create( iCommand, FInv[iSelected].Item ) );

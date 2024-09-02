@@ -297,7 +297,7 @@ begin
     INPUT_PICKUP     : Exit( HandleCommand( TCommand.Create( COMMAND_PICKUP ) ) );
     INPUT_ALTPICKUP  : begin
       iItem := Level.Item[ Player.Position ];
-      if ( iItem = nil ) or (not (iItem.isLever or iItem.isPack or iItem.isWearable) ) then
+      if ( iItem = nil ) or (not (iItem.isLever or iItem.isPack or iItem.isWearable or iItem.isAmmo) ) then
       begin
         IO.Msg( 'There''s nothing to use on the ground!' );
         Exit( False );
