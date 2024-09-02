@@ -407,7 +407,11 @@ begin
     Exit;
   end;
   iInput := IO.MsgCommandChoice('Run - direction...',INPUT_MOVE+[INPUT_ESCAPE,INPUT_WAIT]);
-  if iInput = INPUT_ESCAPE then Exit;
+  if iInput = INPUT_ESCAPE then
+  begin
+    IO.Msg('cancelled.');
+    Exit;
+  end;
   FRun.Start( InputDirection(iInput) );
 end;
 
